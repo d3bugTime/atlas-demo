@@ -1,0 +1,39 @@
+name: Deploy Schema Changes
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # Spin up a temporary PostgreSQL container to act as the dev-url
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: dev_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Atlas
+        uses: ariga/setup-atlas@v0
+
+      - name: Apply Schema Declaratively
+        uses: ariga/atlas-action/schema/apply@v1
+        with:
+          url: ${{ secrets.DATABASE_URL }}
+          to: "file://schema.sql"
+          dev-url: "postgres://user:userpass@localhost:5432/learndb?sslmode=disable"
+          auto-approve: "true"
