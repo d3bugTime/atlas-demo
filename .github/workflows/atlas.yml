@@ -34,6 +34,6 @@ jobs:
         uses: ariga/atlas-action/schema/apply@v1
         with:
           url: ${{ secrets.DATABASE_URL }}
-          to: "file://schema.sql"
+          to: "file://migrations/schema.sql"
           dev-url: "postgres://postgres:password@localhost:5432/dev_db?sslmode=disable"
           auto-approve: "true"
