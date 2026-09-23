@@ -9,7 +9,6 @@ CREATE TABLE "public"."users" (
   "password" character varying(255) NOT NULL,
   "name" character varying(100) NOT NULL,
   "last_name" character varying(100) NOT NULL,
-  "phone" character varying(20) NULL, -- New added column
   PRIMARY KEY ("user_id"),
   CONSTRAINT "users_email_key" UNIQUE ("email")
 );
